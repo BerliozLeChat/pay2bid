@@ -13,8 +13,11 @@ import com.alma.pay2bid.server.IServer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -30,20 +33,21 @@ import static java.lang.System.exit;
  * @author Arnaud Grall
  * @author Thomas Minier
  */
+
 public class ClientGui {
 
     private static final Logger LOGGER = Logger.getLogger(ClientGui.class.getCanonicalName());
-    private Client client;
-    private IServer server;
+    private static Client client;
+    private static IServer server;
     private HashMap<UUID, AuctionView> auctionList;
 
     /**
      * Main frame & elements
      */
-    private JFrame mainFrame;
-    private JLabel statusLabel;
-    private JPanel mainPanel;
-    private JPanel auctionPanel;
+    private static JFrame mainFrame;
+    private static JLabel statusLabel;
+    private static JPanel mainPanel;
+    private static JPanel auctionPanel;
 
     /**
      * Constructor
@@ -53,24 +57,29 @@ public class ClientGui {
         this.client = client;
         this.server = server;
         auctionList = new HashMap<UUID, AuctionView>();
-        server.register(this.client);
 
-        client.addNewAuctionObserver(new INewAuctionObserver() {
-            @Override
-            public void updateNewAuction(AuctionBean auction) {
-                LOGGER.info("A new auction needs to be added to the GUI");
-                addAuctionPanel(auction);
-            }
-        });
-        // paint the GUI
-        createGui();
+        if(this.client == null && this.server ==null){
+            createOfflineGui();
+        }else {
+            server.register(this.client);
+
+            client.addNewAuctionObserver(new INewAuctionObserver() {
+                @Override
+                public void updateNewAuction(AuctionBean auction) {
+                    LOGGER.info("A new auction needs to be added to the GUI");
+                    addAuctionPanel(auction);
+                }
+            });
+            // paint the GUI
+            createGui();
+        }
     }
 
 
     /**
      * Initialize the GUI & populate it with the base elements
      */
-    private void createGui() {
+    public static void createGui() {
         // Create the Main JFrame
         mainFrame = new JFrame("Pay2Bid - Auction");
         Dimension dimension = new Dimension(500, 500);
@@ -95,7 +104,7 @@ public class ClientGui {
         JMenu menu = new JMenu("Options");
         JMenuItem newAuction = new JMenuItem("New Auction");
         newAuction.setActionCommand("newAuction");
-        newAuction.addActionListener(new AuctionInputListener(this));
+        newAuction.addActionListener(new AuctionInputListener(null));
         menu.add(newAuction);
 
         menuBar.add(menu);
@@ -126,6 +135,50 @@ public class ClientGui {
         mainFrame.add(statusLabel, BorderLayout.PAGE_END);
     }
 
+    public void createOfflineGui(){
+        // Create the Main JFrame
+        mainFrame = new JFrame("Pay2Bid - Auction");
+        Dimension dimension = new Dimension(500, 500);
+        mainFrame.setSize(500, 500);
+        mainFrame.setMaximumSize(dimension);
+        mainFrame.setLayout(new BorderLayout());
+
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent){
+                try {
+                    server.disconnect(client);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                exit(0);
+            }
+        });
+        statusLabel = new JLabel("Echec de la connexion au serveur", JLabel
+                .CENTER);
+        statusLabel.setBackground(Color.red);
+        statusLabel.setSize(400,0);
+        mainFrame.add(statusLabel, BorderLayout.CENTER);
+        JButton retry = new JButton("Se connecter");
+        retry.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    server = (IServer) LocateRegistry.getRegistry("localhost", 1099)
+                            .lookup("com.alma.pay2bid.server.Server");
+                    client = new Client(server, "Client " + "localhost");
+                    ClientGui.createGui();
+
+                }catch (Exception ex){
+                    server = null;
+                    client = null;
+                    System.err.println("Echec de la connexion");
+                }
+            }
+        });
+        mainFrame.add(retry,BorderLayout.PAGE_END);
+        mainFrame.setVisible(true);
+    }
     /**
      * Show the client GUI
      */
