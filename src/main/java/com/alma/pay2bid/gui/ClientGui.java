@@ -13,8 +13,11 @@ import com.alma.pay2bid.server.IServer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -30,6 +33,7 @@ import static java.lang.System.exit;
  * @author Arnaud Grall
  * @author Thomas Minier
  */
+
 public class ClientGui {
 
     private static final Logger LOGGER = Logger.getLogger(ClientGui.class.getCanonicalName());
@@ -53,6 +57,7 @@ public class ClientGui {
         this.client = client;
         this.server = server;
         auctionList = new HashMap<UUID, AuctionView>();
+
         server.register(this.client);
 
         client.addNewAuctionObserver(new INewAuctionObserver() {
@@ -125,7 +130,6 @@ public class ClientGui {
 
         mainFrame.add(statusLabel, BorderLayout.PAGE_END);
     }
-
     /**
      * Show the client GUI
      */
