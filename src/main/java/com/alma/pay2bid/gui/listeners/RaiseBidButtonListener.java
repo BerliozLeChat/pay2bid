@@ -34,12 +34,15 @@ public class RaiseBidButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         String command = actionEvent.getActionCommand();
         if("raiseBid".equals(command))  {
-            statusLabel.setText("New bid sent.");
+
             try {
                 server.raiseBid(client, Integer.valueOf(bidField.getText()));
+                statusLabel.setText("New bid sent.");
                 auctionView.disable();
             } catch (RemoteException e) {
                 e.printStackTrace();
+            } catch (Exception e2){
+                statusLabel.setText("Price must be an Integer");
             }
         }
     }
