@@ -39,6 +39,8 @@ public interface IClient extends Remote, Serializable {
      */
     void newPrice(UUID auctionID, int price) throws RemoteException;
 
+    public UUID get_UUID() throws RemoteException;
+
     /**
      * @return
      * @throws RemoteException

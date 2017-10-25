@@ -29,6 +29,7 @@ public class SubmitAuctionListener implements ActionListener{
         try {
             if(!input.getAuctionName().isEmpty()) {
                 AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription());
+                a.setCreator_UUID(client.get_UUID());
                 client.submit(a);
 
                 // close the menu & refresh the status label

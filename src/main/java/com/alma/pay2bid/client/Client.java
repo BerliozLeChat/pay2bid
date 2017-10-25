@@ -186,6 +186,8 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
 
     public IServer getServer(){ return server;}
 
+    public UUID get_UUID() throws RemoteException {return identity.getUUID();}
+
     @Override
     public String getName() throws RemoteException {
         return name;

@@ -148,14 +148,31 @@ public class ClientGui {
             raiseBidButton.addActionListener(new RaiseBidButtonListener(client, client.getServer(), auction, statusLabel));
             auction.setRaiseButton(raiseBidButton);
 
-            //Now add the observer to receive all price updates
-            client.addNewPriceObserver(new INewPriceObserver() {
-                @Override
-                public void updateNewPrice(UUID auctionID, Integer price) {
-                    setAuctionPrice(auctionID, price);
-                    auction.enable();
+
+            try {
+                if(client.get_UUID().equals(auctionBean.getCreator_UUID())) {
+                    auction.disable();
+                    //Now add the observer to receive all price updates
+                    client.addNewPriceObserver(new INewPriceObserver() {
+                        @Override
+                        public void updateNewPrice(UUID auctionID, Integer price) {
+                            setAuctionPrice(auctionID, price);
+                            auction.disable();
+                        }
+                    });
                 }
-            });
+                else{
+                    client.addNewPriceObserver(new INewPriceObserver() {
+                        @Override
+                        public void updateNewPrice(UUID auctionID, Integer price) {
+                            setAuctionPrice(auctionID, price);
+                            auction.enable();
+                        }
+                    });
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
 
             // Add a observer to receive the notification when the bid is sold
             client.addBidSoldObserver(new IBidSoldObserver() {

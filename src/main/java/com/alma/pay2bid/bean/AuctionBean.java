@@ -10,6 +10,7 @@ import java.util.UUID;
  */
 public class AuctionBean implements IBean {
     private UUID uuid;
+    private UUID creator_UUID;
     private int price;
     private String name;
     private String description;
@@ -28,6 +29,10 @@ public class AuctionBean implements IBean {
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
+
+    public UUID getCreator_UUID() { return creator_UUID; }
+
+    public void setCreator_UUID(UUID creator_UUID) { this.creator_UUID = creator_UUID; }
 
     public int getPrice() {
         return price;

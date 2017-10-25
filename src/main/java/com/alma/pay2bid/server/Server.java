@@ -103,6 +103,7 @@ public class Server extends UnicastRemoteObject implements IServer {
             while (auctionInProgress) {
                 wait();
             }
+
             clients.add(client);
             LOGGER.info("client " + client.toString() + " connected");
         } catch (InterruptedException e) {
