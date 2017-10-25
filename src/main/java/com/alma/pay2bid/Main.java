@@ -2,6 +2,7 @@ package com.alma.pay2bid;
 
 import com.alma.pay2bid.client.Client;
 import com.alma.pay2bid.gui.ClientGui;
+import com.alma.pay2bid.gui.ConnectGui;
 import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.server.Server;
 import org.apache.commons.cli.*;
@@ -34,13 +35,7 @@ public class Main {
             c.show();
         } catch (ConnectException e){
           System.err.println("Echec de la connexion ");
-            try {
-                c =new ClientGui(null, null);
-            } catch (RemoteException e1) {
-                e1.printStackTrace();
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
+            ConnectGui  con = new ConnectGui(null,null);
         }catch (Exception e) {
             e.printStackTrace();
         }
