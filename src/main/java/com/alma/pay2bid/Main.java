@@ -2,10 +2,13 @@ package com.alma.pay2bid;
 
 import com.alma.pay2bid.client.Client;
 import com.alma.pay2bid.gui.ClientGui;
+import com.alma.pay2bid.gui.ConnectGui;
 import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.server.Server;
 import org.apache.commons.cli.*;
 
+import java.rmi.ConnectException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Logger;
@@ -20,14 +23,20 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
 
     private static void startClient(String host, int port) {
+        ClientGui c;
+        IServer server;
+        Client client;
         try {
-            IServer server = (IServer) LocateRegistry.getRegistry(host, port).lookup("com.alma.pay2bid.server.Server");
-            Client client = new Client(server, "Client " + host);
+            server = (IServer) LocateRegistry.getRegistry(host, port).lookup("com.alma.pay2bid.server.Server");
+            client = new Client(server, "Client " + host);
 
-            ClientGui c = new ClientGui(client, server);
+            c = new ClientGui(client, server);
 
             c.show();
-        } catch (Exception e) {
+        } catch (ConnectException e){
+          System.err.println("Echec de la connexion ");
+            ConnectGui  con = new ConnectGui(null,null);
+        }catch (Exception e) {
             e.printStackTrace();
         }
     }
