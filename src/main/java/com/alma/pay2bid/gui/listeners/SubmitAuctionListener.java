@@ -27,13 +27,16 @@ public class SubmitAuctionListener implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         try {
-            // send the new auction to the server through the client
-            AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription());
-            client.submit(a);
+            if(!input.getAuctionName().isEmpty()) {
+                AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription());
+                client.submit(a);
 
-            // close the menu & refresh the status label
-            input.hideFrame();
-            input.getStatusLabel().setText("New auction sent...");
+                // close the menu & refresh the status label
+                input.hideFrame();
+                input.getStatusLabel().setText("New auction sent...");
+            }else{
+                input.getStatusLabel().setText("Name must be not null");
+            }
         } catch(Exception e) {
             input.getStatusLabel().setText("Price must be an Integer");
         }
