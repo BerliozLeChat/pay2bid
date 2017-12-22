@@ -4,9 +4,13 @@ import com.alma.pay2bid.bean.AuctionBean;
 import com.alma.pay2bid.client.ClientState;
 import com.alma.pay2bid.client.IClient;
 
+import javax.swing.*;
+import java.awt.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
+import java.util.List;
+import java.util.Timer;
 import java.util.logging.Logger;
 
 /**
@@ -39,7 +43,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
     private static final long CHECK_CONN_DELAY = 30000;
-    private static final long WAITING_NEW_CLIENT = 1000;
 
     private boolean auctionInProgress = false;
     private boolean startNewRound = false;
@@ -102,9 +105,11 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized AuctionBean register(IClient client) throws RemoteException {
         try {
+            client.FenetreAttenteFinRound();
            while (auctionInProgress & !startNewRound) {
                 wait();
             }
+            client.FermetureFenetreAttenteFinRound();
             clients.add(client);
             LOGGER.info("client " + client.toString() + " connected");
             if(auctionInProgress)

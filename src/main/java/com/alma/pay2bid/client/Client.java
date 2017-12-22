@@ -12,9 +12,12 @@ import com.alma.pay2bid.client.observer.INewPriceObserver;
 import com.alma.pay2bid.client.observer.ITimerObserver;
 import com.alma.pay2bid.server.IServer;
 
+import javax.swing.*;
+import java.awt.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
+import java.util.Timer;
 import java.util.logging.Logger;
 
 /**
@@ -74,6 +77,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     private AuctionBean currentAuction;
     private String name;
     private String timeElapsed;
+    private JFrame attenteFinRound = null;
     private ClientState state;
 
     // collections of observers used to connect the client to the GUI
@@ -241,5 +245,27 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     @Override
     public boolean removeTimerObserver(ITimerObserver observer) {
         return newTimerObservers.remove(observer);
+    }
+
+    @Override
+    public void FenetreAttenteFinRound() throws RemoteException{
+        attenteFinRound = new JFrame("Pay 2 Bid");
+        Dimension dimension = new Dimension(500, 500);
+        attenteFinRound.setSize(500, 500);
+        attenteFinRound.setMaximumSize(dimension);
+        attenteFinRound.setLayout(new BorderLayout());
+
+        JLabel statusLabel = new JLabel("En attente de la fin du round",
+                JLabel.CENTER);
+        statusLabel.setBackground(Color.red);
+        statusLabel.setSize(400,0);
+        attenteFinRound.add(statusLabel,BorderLayout.CENTER);
+        attenteFinRound.setVisible(true);
+    }
+
+    @Override
+    public void FermetureFenetreAttenteFinRound() throws RemoteException{
+        attenteFinRound.setVisible(false);
+        attenteFinRound = null;
     }
 }

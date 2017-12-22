@@ -50,4 +50,8 @@ public interface IClient extends Remote, Serializable {
     ClientState getState() throws RemoteException;
 
     void setState(ClientState newState) throws RemoteException;
+
+    public void FenetreAttenteFinRound() throws RemoteException;
+
+    public void FermetureFenetreAttenteFinRound() throws RemoteException;
 }
