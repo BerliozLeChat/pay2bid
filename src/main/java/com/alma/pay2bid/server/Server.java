@@ -66,8 +66,8 @@ public class Server extends UnicastRemoteObject implements IServer {
     private void launchAuction() throws RemoteException {
         auctionInProgress = true;
         nbParticipants = clients.size();
-
         currentAuction = auctions.poll();
+        winner = null;
         LOGGER.info("Auction '" + currentAuction.getName() + "' launched !");
 
         // notify the client's that a new auction has begun

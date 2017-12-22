@@ -65,7 +65,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     }
 
     private static final Logger LOGGER = Logger.getLogger(Client.class.getCanonicalName());
-    private static final long TIME_TO_RAISE_BID = 30000;
+    private static final long TIME_TO_RAISE_BID = 5000;
     private static final long TIME_TO_REFRESH = 1000;
 
     private ClientBean identity;

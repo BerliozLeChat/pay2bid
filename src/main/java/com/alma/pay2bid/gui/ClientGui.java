@@ -183,7 +183,13 @@ public class ClientGui {
                 @Override
                 public void updateBidSold(IClient client) {
                     try {
-                        auction.setWinner(client.getName());
+                        if(client!=null){
+                            String nameWinner = client.getName();
+                            auction.setWinner(nameWinner);
+                        }else{
+                            auction.enable();
+                            auction.setWinner("nobody");
+                        }
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }

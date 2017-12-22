@@ -22,6 +22,7 @@ public class AuctionView {
     private JTextField auctionBid;
     private JLabel auctionBidLabel;
     private JButton raiseButton;
+    private boolean finish = false;
 
     public AuctionView(AuctionBean auction){
         auctionPanel = new JPanel();
@@ -67,9 +68,12 @@ public class AuctionView {
     }
 
     public void setWinner(String name) {
-        auctionBidLabel.setText("Winner : " + name);
-        auctionBid.setVisible(false);
-        raiseButton.setVisible(false);
+        if(!finish){
+            auctionBidLabel.setText("Winner : " + name);
+            auctionBid.setVisible(false);
+            raiseButton.setVisible(false);
+            finish=true;            
+        }
     }
 
     public void setRaiseButton(JButton raiseButton) {
