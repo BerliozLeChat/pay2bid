@@ -55,9 +55,11 @@ public class AuctionView {
     }
 
     public void enable() {
-        auctionBid.setVisible(true);
-        auctionBidLabel.setVisible(true);
-        raiseButton.setVisible(true);
+        if(!finish){
+            auctionBid.setVisible(true);
+            auctionBidLabel.setVisible(true);
+            raiseButton.setVisible(true);
+        }
     }
 
     public void disable() {
@@ -70,9 +72,12 @@ public class AuctionView {
     public void setWinner(String name) {
         if(!finish){
             auctionBidLabel.setText("Winner : " + name);
+            auctionBidLabel.setVisible(true);
             auctionBid.setVisible(false);
             raiseButton.setVisible(false);
-            finish=true;            
+            auctionTimer.getLabelFor().setVisible(false);
+            auctionTimer.setVisible(false);
+            finish=true;
         }
     }
 
@@ -94,6 +99,8 @@ public class AuctionView {
     }
 
     public void setAuctionTimer(String time) {
-        this.auctionTimer.setText(time);
+        if(!finish){
+            this.auctionTimer.setText(time);
+        }
     }
 }
