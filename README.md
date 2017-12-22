@@ -1,4 +1,4 @@
-# Middleware Project - Pay2bid
+# Middleware Project - Pay2bid [![Build Status](https://api.travis-ci.org/BerliozLeChat/pay2bid.svg?branch=master)](https://travis-ci.org/BerliozLeChat/pay2bid)
 Distributed auction house application - Middleware project, M2 ALMA 2016/2017   
 **Auteurs** : Alexis Giraudet, Arnaud Grall, Thomas Minier
 
