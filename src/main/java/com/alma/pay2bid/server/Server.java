@@ -39,8 +39,10 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
     private static final long CHECK_CONN_DELAY = 30000;
+    private static final long WAITING_NEW_CLIENT = 1000;
 
     private boolean auctionInProgress = false;
+    private boolean startNewRound = false;
     private AuctionBean currentAuction;
     private IClient winner;
     private int nbParticipants = 0;
@@ -98,17 +100,21 @@ public class Server extends UnicastRemoteObject implements IServer {
      * @throws RemoteException
      */
     @Override
-    public synchronized void register(IClient client) throws RemoteException {
+    public synchronized AuctionBean register(IClient client) throws RemoteException {
         try {
-            while (auctionInProgress) {
+           while (auctionInProgress & !startNewRound) {
                 wait();
             }
-
             clients.add(client);
             LOGGER.info("client " + client.toString() + " connected");
+            if(auctionInProgress)
+                return currentAuction;
+            else
+                return null;
         } catch (InterruptedException e) {
             LOGGER.warning(e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -126,7 +132,13 @@ public class Server extends UnicastRemoteObject implements IServer {
      * Validate and flush all waiting registrations
      */
     private synchronized void validateRegistrations() {
+        startNewRound = true;
+        notifyAll();
+    }
+
+    private synchronized void validateRegistrationsNewAuction() {
         auctionInProgress = false;
+        startNewRound = false;
         notifyAll();
     }
 
@@ -154,6 +166,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized void timeElapsed(IClient client) throws RemoteException, InterruptedException {
         nbParticipants--;
+        validateRegistrations();
         if (nbParticipants == 0) {
             // case of a blank round : the auction is completed
             if(bidByClient.size() == 0) {
@@ -163,7 +176,7 @@ public class Server extends UnicastRemoteObject implements IServer {
                 }
 
                 // validate the registrations of clients in the monitor's queue
-                validateRegistrations();
+                validateRegistrationsNewAuction();
 
                 // launch the next auction if there is one available and enough clients
                 if (!auctions.isEmpty() && (clients.size() >= MIN_NUMBER_CLIENTS)) {
@@ -181,6 +194,7 @@ public class Server extends UnicastRemoteObject implements IServer {
                 currentAuction.setPrice(maxBid);
                 LOGGER.info("End of a round. Bid = " + maxBid + " - The current winner is " + client.toString());
 
+
                 // clean the data structures before the next round
                 nbParticipants = clients.size();
                 bidByClient.clear();
@@ -189,6 +203,8 @@ public class Server extends UnicastRemoteObject implements IServer {
                 for (IClient c : clients) {
                     c.newPrice(currentAuction.getUUID(), maxBid);
                 }
+
+                startNewRound = false;
             }
         }
     }

@@ -58,7 +58,7 @@ public class ClientGui {
         this.server = server;
         auctionList = new HashMap<UUID, AuctionView>();
 
-        server.register(this.client);
+        AuctionBean currentAuction = server.register(this.client);
 
         client.addNewAuctionObserver(new INewAuctionObserver() {
             @Override
@@ -67,8 +67,13 @@ public class ClientGui {
                 addAuctionPanel(auction);
             }
         });
+
         // paint the GUI
         createGui();
+
+        if (currentAuction != null)
+            client.newAuction(currentAuction);
+
     }
 
 

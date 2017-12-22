@@ -24,7 +24,7 @@ public interface IServer extends Remote {
      * @throws RemoteException
      * @throws InterruptedException
      */
-    void register(IClient client) throws RemoteException, InterruptedException;
+    AuctionBean register(IClient client) throws RemoteException, InterruptedException;
 
     void disconnect(IClient client) throws RemoteException;
 
