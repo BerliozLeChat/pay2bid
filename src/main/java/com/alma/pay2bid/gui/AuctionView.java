@@ -90,6 +90,10 @@ public class AuctionView {
         auctionPriceValue.setText(String.valueOf(newPrice));
     }
 
+    public String getPrice(){
+        return auctionPriceValue.getText();
+    }
+
     public JTextField getAuctionBid() {
         return auctionBid;
     }
