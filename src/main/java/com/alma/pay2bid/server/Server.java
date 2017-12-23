@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  * @author Alexis Giraudet
  * @author Arnaud Grall
  * @author Thomas Minier
+ * Application corrigée et améliorée par Camille Le Luet, Asma Khelifi, François Hallereau, Sébastien Vallée et Sullivan Pineau
  */
 public class Server extends UnicastRemoteObject implements IServer {
 

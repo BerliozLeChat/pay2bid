@@ -2,13 +2,11 @@ package com.alma.pay2bid;
 
 import com.alma.pay2bid.client.Client;
 import com.alma.pay2bid.gui.ClientGui;
-import com.alma.pay2bid.gui.ConnectGui;
+import com.alma.pay2bid.gui.Authentification;
 import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.server.Server;
 import org.apache.commons.cli.*;
 
-import java.rmi.ConnectException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Logger;
@@ -18,6 +16,7 @@ import java.util.logging.Logger;
  * @author Alexis Giraudet
  * @author Arnaud Grall
  * @author Thomas Minier
+ * Application corrigée et améliorée par Camille Le Luet, Asma Khelifi, François Hallereau, Sébastien Vallée et Sullivan Pineau
  */
 public class Main {
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
@@ -26,19 +25,7 @@ public class Main {
         ClientGui c;
         IServer server;
         Client client;
-        try {
-            server = (IServer) LocateRegistry.getRegistry(host, port).lookup("com.alma.pay2bid.server.Server");
-            client = new Client(server, "Client " + host);
-
-            c = new ClientGui(client, server);
-
-            c.show();
-        } catch (ConnectException e){
-          System.err.println("Echec de la connexion ");
-            ConnectGui  con = new ConnectGui(null,null);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        Authentification authentification = new Authentification(null, null);
     }
 
     private static void startServer(int port, boolean daemon) {

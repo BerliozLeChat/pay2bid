@@ -12,13 +12,24 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 
+/**
+ * The widget used to manage the connection
+ * @author Camille Le Luet
+ * @author Asma Khelifi
+ * @author François Hallereau
+ * @author Sébastien Vallée
+ * @author Sullivan Pineau
+ */
+
 public class ConnectGui{
 
     private Client client;
     private IServer server;
     private JFrame frame;
+    private String pseudo = "default";
 
-    public ConnectGui(Client client, IServer server){
+    public ConnectGui(Client client, IServer server, String name){
+        this.pseudo = name;
         this.client = client;
         this.server = server;
 
@@ -58,7 +69,7 @@ public class ConnectGui{
                     server = (IServer) LocateRegistry.getRegistry("localhost", 1099)
                             .lookup("com.alma.pay2bid.server.Server");
 
-                    client = new Client(server, "Client " + "localhost");
+                    client = new Client(server, pseudo);
 
                     ClientGui c = new ClientGui(client,server);
                     c.show();
