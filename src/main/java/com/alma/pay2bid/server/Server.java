@@ -106,11 +106,11 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized AuctionBean register(IClient client) throws RemoteException {
         try {
-            client.FenetreAttenteFinRound();
+            if(auctionInProgress)
+                client.FenetreAttenteFinRound();
            while (auctionInProgress & !startNewRound) {
                 wait();
             }
-            client.FermetureFenetreAttenteFinRound();
             clients.add(client);
             LOGGER.info("client " + client.toString() + " connected");
             if(auctionInProgress)
