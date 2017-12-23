@@ -78,7 +78,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     private AuctionBean currentAuction;
     private String name;
     private String timeElapsed;
-    private JFrame attenteFinRound = null;
+    private JFrame attenteFinRound;
     private ClientState state;
 
     // collections of observers used to connect the client to the GUI
@@ -250,22 +250,20 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
 
     @Override
     public void FenetreAttenteFinRound() throws RemoteException{
-        System.out.println("Veuillez patienter...");
+        System.out.println("Veuillez patienter...");/*
         attenteFinRound = new JFrame("Pay 2 Bid");
         JPanel panel = new JPanel();
         attenteFinRound.setSize(new Dimension(500, 200));
         JLabel message = new JLabel("En attente de la fin du round ...");
         panel.add(message);
-        JPanel container = new JPanel();
-        container.add(panel);
-        attenteFinRound.setContentPane(container);
-        attenteFinRound.setVisible(true);
+        attenteFinRound.setContentPane(panel);
+        attenteFinRound.setVisible(true);*/
     }
 
     @Override
     public void FermetureFenetreAttenteFinRound() throws RemoteException{
         System.out.println("Merci d'avoir patienté.");
-        attenteFinRound.setVisible(false);
-        attenteFinRound = null;
+        /*attenteFinRound.setVisible(false);
+        attenteFinRound = null;*/
     }
 }
