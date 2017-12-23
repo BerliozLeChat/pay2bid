@@ -19,7 +19,7 @@ import java.rmi.registry.LocateRegistry;
  * @author Sébastien Vallée
  * @author Sullivan Pineau
  */
-public class Authentification {
+public class Identification {
     private Client client;
     private IServer server;
     private String host;
@@ -28,7 +28,7 @@ public class Authentification {
     private JTextField  name_user;
     private ClientGui c;
 
-    public Authentification(String host, int port){
+    public Identification(String host, int port){
         this.host = host;
         this.port = port;
         draw();

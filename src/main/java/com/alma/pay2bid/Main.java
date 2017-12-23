@@ -1,8 +1,6 @@
 package com.alma.pay2bid;
 
-import com.alma.pay2bid.client.Client;
-import com.alma.pay2bid.gui.ClientGui;
-import com.alma.pay2bid.gui.Authentification;
+import com.alma.pay2bid.gui.Identification;
 import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.server.Server;
 import org.apache.commons.cli.*;
@@ -22,7 +20,7 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
 
     private static void startClient(String host, int port) {
-            Authentification authentification = new Authentification( host, port);
+            Identification identification = new Identification( host, port);
     }
 
     private static void startServer(int port, boolean daemon) {
