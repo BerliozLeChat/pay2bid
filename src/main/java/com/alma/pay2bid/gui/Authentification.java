@@ -22,27 +22,16 @@ import java.rmi.registry.LocateRegistry;
 public class Authentification {
     private Client client;
     private IServer server;
+    private String host;
+    private int port;
     private JFrame frame;
     private JTextField  name_user;
+    private ClientGui c;
 
-    public Authentification(Client client, IServer server){
-        this.client = client;
-        this.server = server;
-
-
-        if(this.client == null && this.server == null){
-            draw();
-        }
-        else{
-            try {
-                ClientGui c = new ClientGui(client,server);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                ConnectGui  con = new ConnectGui(null,null, name_user.getText());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public Authentification(String host, int port){
+        this.host = host;
+        this.port = port;
+        draw();
     }
 
     public void draw(){
@@ -67,19 +56,18 @@ public class Authentification {
             public void actionPerformed(ActionEvent e) {
                 if(!name_user.getText().equals("")) {
                     try {
-                        server = (IServer) LocateRegistry.getRegistry("localhost", 1099)
+                        frame.dispose();
+                        server = (IServer) LocateRegistry.getRegistry(host, port)
                                 .lookup("com.alma.pay2bid.server.Server");
 
                         client = new Client(server, name_user.getText());
-                        ClientGui c = new ClientGui(client, server);
+                        c = new ClientGui(client, server);
                         c.show();
-                        frame.dispose();
-
-                    } catch (ConnectException ec) {
+                    } catch (ConnectException ex){
+                        System.err.println("Echec de la connexion ");
                         ConnectGui con = new ConnectGui(null, null, name_user.getText());
-                    } catch (Exception ex) {
-
-                        ex.printStackTrace();
+                    }catch (Exception ey) {
+                        ey.printStackTrace();
                     }
                 }
             }

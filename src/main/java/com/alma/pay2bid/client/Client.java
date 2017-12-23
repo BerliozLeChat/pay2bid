@@ -250,22 +250,21 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
 
     @Override
     public void FenetreAttenteFinRound() throws RemoteException{
+        System.out.println("Veuillez patienter...");
         attenteFinRound = new JFrame("Pay 2 Bid");
-        Dimension dimension = new Dimension(500, 500);
-        attenteFinRound.setSize(500, 500);
-        attenteFinRound.setMaximumSize(dimension);
-        attenteFinRound.setLayout(new BorderLayout());
-
-        JLabel statusLabel = new JLabel("En attente de la fin du round",
-                JLabel.CENTER);
-        statusLabel.setBackground(Color.red);
-        statusLabel.setSize(400,0);
-        attenteFinRound.add(statusLabel,BorderLayout.CENTER);
+        JPanel panel = new JPanel();
+        attenteFinRound.setSize(new Dimension(500, 200));
+        JLabel message = new JLabel("En attente de la fin du round ...");
+        panel.add(message);
+        JPanel container = new JPanel();
+        container.add(panel);
+        attenteFinRound.setContentPane(container);
         attenteFinRound.setVisible(true);
     }
 
     @Override
     public void FermetureFenetreAttenteFinRound() throws RemoteException{
+        System.out.println("Merci d'avoir patienté.");
         attenteFinRound.setVisible(false);
         attenteFinRound = null;
     }

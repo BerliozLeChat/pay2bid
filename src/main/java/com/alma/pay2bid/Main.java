@@ -22,10 +22,7 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
 
     private static void startClient(String host, int port) {
-        ClientGui c;
-        IServer server;
-        Client client;
-        Authentification authentification = new Authentification(null, null);
+            Authentification authentification = new Authentification( host, port);
     }
 
     private static void startServer(int port, boolean daemon) {
